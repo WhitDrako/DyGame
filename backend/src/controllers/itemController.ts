@@ -152,6 +152,14 @@ export function createItem(req: Request, res: Response) {
     // Get image path if uploaded
     const imagePath = (req as any).file ? `/uploads/${(req as any).file.filename}` : null;
 
+    // Parse boolean values properly (FormData sends strings)
+    const parseBool = (val: any, defaultVal: boolean): number => {
+      if (val === undefined || val === null) return defaultVal ? 1 : 0;
+      if (typeof val === 'boolean') return val ? 1 : 0;
+      if (typeof val === 'string') return val === 'true' ? 1 : 0;
+      return val ? 1 : 0;
+    };
+
     db.prepare(`
       INSERT INTO items (id, name, description, category_id, rarity, current_value, image_path, is_tradeable, is_unobtainable, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
@@ -163,8 +171,8 @@ export function createItem(req: Request, res: Response) {
       rarity,
       current_value,
       imagePath,
-      is_tradeable !== undefined ? (is_tradeable ? 1 : 0) : 1,
-      is_unobtainable !== undefined ? (is_unobtainable ? 1 : 0) : 0
+      parseBool(is_tradeable, true),
+      parseBool(is_unobtainable, false)
     );
 
     // Add initial value to history
@@ -199,6 +207,14 @@ export function updateItem(req: Request, res: Response) {
     // Check if value changed
     const valueChanged = current_value !== undefined && current_value !== existingItem.current_value;
 
+    // Parse boolean values properly (FormData sends strings)
+    const parseBoolOrNull = (val: any): number | null => {
+      if (val === undefined || val === null) return null;
+      if (typeof val === 'boolean') return val ? 1 : 0;
+      if (typeof val === 'string') return val === 'true' ? 1 : 0;
+      return val ? 1 : 0;
+    };
+
     db.prepare(`
       UPDATE items SET
         name = COALESCE(?, name),
@@ -220,8 +236,8 @@ export function updateItem(req: Request, res: Response) {
       current_value !== undefined ? current_value : null,
       imagePath,
       trend || null,
-      is_tradeable !== undefined ? (is_tradeable ? 1 : 0) : null,
-      is_unobtainable !== undefined ? (is_unobtainable ? 1 : 0) : null,
+      parseBoolOrNull(is_tradeable),
+      parseBoolOrNull(is_unobtainable),
       id
     );
 
