@@ -196,36 +196,30 @@ export default function TradeComparator() {
   };
 
   if (isLoading) {
-    return <Loading message="Loading trade comparator..." />;
+    return <Loading message="Loading..." />;
   }
 
   return (
     <div className="page-container">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="section-title">
-          <Scale className="w-8 h-8 text-gold-400" />
-          Trade Comparator
-        </h1>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-white mb-1">Trade Calculator</h1>
         <p className="text-ocean-400">
-          Compare the value of items in a trade to see if you're getting a good
-          deal
+          Check if a trade is fair by comparing item values
         </p>
       </div>
 
       {/* Cooldown warning */}
       {cooldown.cooldownActive && (
-        <div className="card p-4 mb-6 flex items-center gap-4 border-gold-500/30">
-          <Clock className="w-6 h-6 text-gold-400 animate-pulse" />
-          <div>
-            <p className="text-white font-medium">Cooldown Active</p>
-            <p className="text-ocean-400 text-sm">
-              You can compare again in{' '}
-              <span className="text-gold-400 font-mono">
-                {formatCooldown(cooldown.remainingSeconds)}
-              </span>
-            </p>
-          </div>
+        <div className="bg-ocean-800/50 border border-ocean-700 rounded-lg p-4 mb-6 flex items-center gap-4">
+          <Clock className="w-5 h-5 text-gold-400" />
+          <p className="text-ocean-300 text-sm">
+            Wait{' '}
+            <span className="text-gold-400 font-mono">
+              {formatCooldown(cooldown.remainingSeconds)}
+            </span>
+            {' '}before comparing again
+          </p>
         </div>
       )}
 

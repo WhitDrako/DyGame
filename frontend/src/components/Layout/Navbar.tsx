@@ -2,15 +2,13 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
-  Anchor,
   Home,
   Search,
-  Scale,
-  Shield,
+  Calculator,
+  Settings,
   LogOut,
   Menu,
   X,
-  User,
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -22,36 +20,30 @@ export default function Navbar() {
 
   const navLinks = [
     { path: '/', label: 'Home', icon: Home },
-    { path: '/catalog', label: 'Catalog', icon: Search },
-    { path: '/trade', label: 'Trade Comparator', icon: Scale },
-  ];
-
-  const adminLinks = [
-    { path: '/admin', label: 'Admin Panel', icon: Shield },
+    { path: '/catalog', label: 'Items', icon: Search },
+    { path: '/trade', label: 'Calculator', icon: Calculator },
   ];
 
   return (
-    <nav className="bg-ocean-900/95 backdrop-blur-md border-b border-ocean-700/50 sticky top-0 z-50">
+    <nav className="bg-ocean-900 border-b border-ocean-800 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-gold-400 to-gold-600 rounded-lg flex items-center justify-center shadow-glow-gold group-hover:scale-105 transition-transform">
-              <Anchor className="w-6 h-6 text-ocean-900" />
-            </div>
-            <span className="font-display text-xl font-bold text-gradient-gold hidden sm:block">
-              GPO Trading
-            </span>
+          <Link to="/" className="flex items-center gap-2">
+            <span className="text-xl font-bold text-white">GPO</span>
+            <span className="text-xl font-bold text-gold-400">Values</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`nav-link flex items-center gap-2 ${
-                  isActive(link.path) ? 'nav-link-active' : ''
+                className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive(link.path)
+                    ? 'bg-ocean-800 text-white'
+                    : 'text-ocean-300 hover:text-white hover:bg-ocean-800/50'
                 }`}
               >
                 <link.icon className="w-4 h-4" />
@@ -59,39 +51,37 @@ export default function Navbar() {
               </Link>
             ))}
 
-            {user?.isAdmin &&
-              adminLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`nav-link flex items-center gap-2 text-gold-400 ${
-                    isActive(link.path) ? 'nav-link-active' : ''
-                  }`}
-                >
-                  <link.icon className="w-4 h-4" />
-                  {link.label}
-                </Link>
-              ))}
+            {user?.isAdmin && (
+              <Link
+                to="/admin"
+                className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive('/admin')
+                    ? 'bg-gold-500/20 text-gold-400'
+                    : 'text-gold-400/70 hover:text-gold-400 hover:bg-gold-500/10'
+                }`}
+              >
+                <Settings className="w-4 h-4" />
+                Admin
+              </Link>
+            )}
           </div>
 
           {/* User Menu */}
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 text-ocean-300">
-              <User className="w-4 h-4" />
-              <span className="font-medium">{user?.username}</span>
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-2">
+              <span className="text-ocean-300 text-sm">{user?.username}</span>
               {user?.isAdmin && (
-                <span className="px-2 py-0.5 bg-gold-500/20 text-gold-400 text-xs font-medium rounded">
-                  ADMIN
+                <span className="px-1.5 py-0.5 bg-gold-500/20 text-gold-400 text-xs rounded">
+                  Admin
                 </span>
               )}
             </div>
 
             <button
               onClick={logout}
-              className="hidden sm:flex items-center gap-2 text-ocean-400 hover:text-red-400 transition-colors"
+              className="hidden sm:flex items-center gap-1 text-ocean-400 hover:text-red-400 text-sm transition-colors"
             >
               <LogOut className="w-4 h-4" />
-              <span className="text-sm">Logout</span>
             </button>
 
             {/* Mobile menu button */}
@@ -99,26 +89,24 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 text-ocean-300 hover:text-white"
             >
-              {mobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-ocean-700/50">
-            <div className="flex flex-col gap-2">
+          <div className="md:hidden py-3 border-t border-ocean-800">
+            <div className="flex flex-col gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`nav-link flex items-center gap-2 ${
-                    isActive(link.path) ? 'nav-link-active' : ''
+                  className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium ${
+                    isActive(link.path)
+                      ? 'bg-ocean-800 text-white'
+                      : 'text-ocean-300 hover:bg-ocean-800/50'
                   }`}
                 >
                   <link.icon className="w-4 h-4" />
@@ -126,41 +114,34 @@ export default function Navbar() {
                 </Link>
               ))}
 
-              {user?.isAdmin &&
-                adminLinks.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`nav-link flex items-center gap-2 text-gold-400 ${
-                      isActive(link.path) ? 'nav-link-active' : ''
-                    }`}
-                  >
-                    <link.icon className="w-4 h-4" />
-                    {link.label}
-                  </Link>
-                ))}
-
-              <div className="border-t border-ocean-700/50 my-2 pt-2">
-                <div className="flex items-center gap-2 text-ocean-300 px-4 py-2">
-                  <User className="w-4 h-4" />
-                  <span className="font-medium">{user?.username}</span>
-                  {user?.isAdmin && (
-                    <span className="px-2 py-0.5 bg-gold-500/20 text-gold-400 text-xs font-medium rounded">
-                      ADMIN
-                    </span>
-                  )}
-                </div>
-                <button
-                  onClick={() => {
-                    logout();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="flex items-center gap-2 text-ocean-400 hover:text-red-400 transition-colors px-4 py-2 w-full"
+              {user?.isAdmin && (
+                <Link
+                  to="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium ${
+                    isActive('/admin')
+                      ? 'bg-gold-500/20 text-gold-400'
+                      : 'text-gold-400/70 hover:bg-gold-500/10'
+                  }`}
                 >
-                  <LogOut className="w-4 h-4" />
-                  <span>Logout</span>
-                </button>
+                  <Settings className="w-4 h-4" />
+                  Admin
+                </Link>
+              )}
+
+              <div className="border-t border-ocean-800 mt-2 pt-2">
+                <div className="flex items-center justify-between px-3 py-2">
+                  <span className="text-ocean-300 text-sm">{user?.username}</span>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="text-ocean-400 hover:text-red-400 text-sm"
+                  >
+                    Logout
+                  </button>
+                </div>
               </div>
             </div>
           </div>

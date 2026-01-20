@@ -1,21 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { itemsApi, categoriesApi } from '../utils/api';
 import { Item, Category } from '../types';
 import ItemCard from '../components/items/ItemCard';
 import Loading from '../components/ui/Loading';
-import {
-  Anchor,
-  TrendingUp,
-  Scale,
-  Sparkles,
-  ChevronRight,
-  Star,
-} from 'lucide-react';
+import { Search, ChevronRight, Gem, Swords, Crown } from 'lucide-react';
 
 export default function Home() {
-  const { user } = useAuth();
   const [trendingItems, setTrendingItems] = useState<Item[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,124 +31,94 @@ export default function Home() {
   }, []);
 
   if (isLoading) {
-    return <Loading message="Loading the Grand Line..." />;
+    return <Loading message="Loading..." />;
   }
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
-        {/* Background decorations */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 left-10 w-64 h-64 bg-gold-500/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-ocean-500/10 rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="page-container relative z-10">
-          <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-ocean-800/50 rounded-full border border-ocean-600/30 mb-6">
-              <Star className="w-4 h-4 text-gold-400" />
-              <span className="text-ocean-200 text-sm">Welcome back, {user?.username}</span>
-            </div>
-
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold mb-6">
-              <span className="text-white">Navigate the </span>
-              <span className="text-gradient-gold">Grand Line</span>
-              <span className="text-white"> of Trading</span>
+    <div>
+      {/* Hero - Simple */}
+      <section className="py-12 sm:py-16">
+        <div className="page-container">
+          <div className="max-w-2xl">
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              GPO Value List
             </h1>
-
-            <p className="text-ocean-300 text-lg sm:text-xl mb-8 max-w-2xl mx-auto">
-              Track item values, compare trades, and make informed decisions in
-              the world of Grand Piece Online.
+            <p className="text-ocean-300 text-lg mb-6">
+              Check the latest values for all Grand Piece Online items.
+              Fruits, weapons, accessories and more.
             </p>
+            <Link to="/catalog" className="btn-primary inline-flex items-center gap-2">
+              <Search className="w-5 h-5" />
+              Browse All Items
+            </Link>
+          </div>
+        </div>
+      </section>
 
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/catalog" className="btn-primary flex items-center gap-2">
-                <Sparkles className="w-5 h-5" />
-                Browse Catalog
-              </Link>
-              <Link to="/trade" className="btn-secondary flex items-center gap-2">
-                <Scale className="w-5 h-5" />
-                Trade Comparator
-              </Link>
+      {/* Quick Stats - Real data only */}
+      <section className="py-8 border-y border-ocean-800">
+        <div className="page-container">
+          <div className="flex flex-wrap gap-8 justify-center sm:justify-start">
+            <div className="flex items-center gap-3">
+              <Gem className="w-6 h-6 text-mythical" />
+              <div>
+                <p className="text-white font-semibold">{trendingItems.length}+ Items</p>
+                <p className="text-ocean-400 text-sm">In database</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Swords className="w-6 h-6 text-legendary" />
+              <div>
+                <p className="text-white font-semibold">{categories.length} Categories</p>
+                <p className="text-ocean-400 text-sm">Organized</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Crown className="w-6 h-6 text-gold-400" />
+              <div>
+                <p className="text-white font-semibold">Updated Daily</p>
+                <p className="text-ocean-400 text-sm">Fresh values</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-12 border-y border-ocean-700/30">
+      {/* Top Value Items */}
+      <section className="py-12">
         <div className="page-container">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { label: 'Total Items', value: trendingItems.length + '+', icon: Anchor },
-              { label: 'Categories', value: categories.length, icon: Sparkles },
-              { label: 'Active Traders', value: '1000+', icon: TrendingUp },
-              { label: 'Trades Today', value: '500+', icon: Scale },
-            ].map((stat, index) => (
-              <div
-                key={index}
-                className="card p-6 text-center hover:border-gold-500/30 transition-colors"
-              >
-                <stat.icon className="w-8 h-8 text-gold-400 mx-auto mb-3" />
-                <p className="text-2xl font-bold text-white mb-1">{stat.value}</p>
-                <p className="text-ocean-400 text-sm">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Trending Items Section */}
-      <section className="py-16">
-        <div className="page-container">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="section-title">
-              <TrendingUp className="w-8 h-8 text-gold-400" />
-              Top Value Items
-            </h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-white">Highest Value Items</h2>
             <Link
-              to="/catalog"
-              className="flex items-center gap-1 text-gold-400 hover:text-gold-300 transition-colors"
+              to="/catalog?sort=value_high"
+              className="flex items-center gap-1 text-gold-400 hover:text-gold-300 text-sm"
             >
-              View All
+              See all
               <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {trendingItems.map((item, index) => (
-              <div
-                key={item.id}
-                className={`animate-in stagger-${Math.min(index + 1, 5)}`}
-                style={{ opacity: 0 }}
-              >
-                <ItemCard item={item} />
-              </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {trendingItems.map((item) => (
+              <ItemCard key={item.id} item={item} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section className="py-16 bg-ocean-900/30">
+      {/* Categories */}
+      <section className="py-12 bg-ocean-900/50">
         <div className="page-container">
-          <h2 className="section-title mb-8">
-            <Sparkles className="w-8 h-8 text-gold-400" />
-            Browse Categories
-          </h2>
+          <h2 className="text-xl font-bold text-white mb-6">Categories</h2>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             {categories.map((category) => (
               <Link
                 key={category.id}
                 to={`/catalog?category=${category.id}`}
-                className="card card-hover p-6 text-center group"
+                className="bg-ocean-800/50 hover:bg-ocean-800 border border-ocean-700 hover:border-ocean-600 rounded-lg p-4 transition-colors"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-gold-400/20 to-gold-600/20 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Anchor className="w-6 h-6 text-gold-400" />
-                </div>
-                <h3 className="font-semibold text-white mb-1">{category.name}</h3>
+                <h3 className="font-medium text-white mb-1">{category.name}</h3>
                 <p className="text-ocean-400 text-sm">
                   {category.item_count || 0} items
                 </p>
@@ -167,25 +128,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20">
+      {/* Trade Calculator CTA - Simpler */}
+      <section className="py-12">
         <div className="page-container">
-          <div className="card p-8 sm:p-12 text-center relative overflow-hidden">
-            {/* Background decoration */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gold-500/10 to-transparent"></div>
-
-            <div className="relative z-10">
-              <Scale className="w-16 h-16 text-gold-400 mx-auto mb-6" />
-              <h2 className="text-2xl sm:text-3xl font-display font-bold text-white mb-4">
-                Ready to Make a Trade?
-              </h2>
-              <p className="text-ocean-300 mb-8 max-w-xl mx-auto">
-                Use our trade comparator to analyze any trade before you make it.
-                Know exactly if you're getting a WIN, FAIR, or LOSE deal.
-              </p>
-              <Link to="/trade" className="btn-primary inline-flex items-center gap-2">
-                <Scale className="w-5 h-5" />
-                Open Trade Comparator
+          <div className="bg-ocean-800/50 border border-ocean-700 rounded-lg p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h2 className="text-lg font-bold text-white mb-1">
+                  Trade Calculator
+                </h2>
+                <p className="text-ocean-400">
+                  Compare item values to check if a trade is fair
+                </p>
+              </div>
+              <Link to="/trade" className="btn-secondary whitespace-nowrap">
+                Open Calculator
               </Link>
             </div>
           </div>

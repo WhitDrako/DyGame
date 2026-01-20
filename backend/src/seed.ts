@@ -4,25 +4,21 @@ import db, { initializeDatabase } from './models/database';
 // Initialize database first
 initializeDatabase();
 
-console.log('🌊 Seeding GPO Trading Platform database...');
+console.log('Seeding GPO database...');
 
 // Clear existing data
 db.exec('DELETE FROM value_history');
 db.exec('DELETE FROM items');
 db.exec('DELETE FROM categories');
 
-// Categories
+// Categories - Simplified
 const categories = [
-  { id: uuidv4(), name: 'Devil Fruits', description: 'Mysterious fruits granting supernatural powers', display_order: 1 },
-  { id: uuidv4(), name: 'Legendary Fruits', description: 'The rarest and most powerful devil fruits', display_order: 2 },
-  { id: uuidv4(), name: 'Mythical Fruits', description: 'Fruits of mythological power', display_order: 3 },
-  { id: uuidv4(), name: 'Weapons', description: 'Blades, guns, and legendary armaments', display_order: 4 },
-  { id: uuidv4(), name: 'Accessories', description: 'Rings, capes, and special equipment', display_order: 5 },
-  { id: uuidv4(), name: 'Event Items', description: 'Limited-time and seasonal items', display_order: 6 },
-  { id: uuidv4(), name: 'Boats', description: 'Ships for sailing the Grand Line', display_order: 7 },
-  { id: uuidv4(), name: 'Outfits', description: 'Cosmetic clothing and armor', display_order: 8 },
-  { id: uuidv4(), name: 'Consumables', description: 'Food, potions, and temporary boosts', display_order: 9 },
-  { id: uuidv4(), name: 'Unobtainables', description: 'Items no longer available in-game', display_order: 10 }
+  { id: uuidv4(), name: 'Fruits', description: 'Devil Fruits with various powers', display_order: 1 },
+  { id: uuidv4(), name: 'Weapons', description: 'Swords, guns and fighting tools', display_order: 2 },
+  { id: uuidv4(), name: 'Accessories', description: 'Capes, rings and equipment', display_order: 3 },
+  { id: uuidv4(), name: 'Boats', description: 'Ships for sailing', display_order: 4 },
+  { id: uuidv4(), name: 'Materials', description: 'Crafting and upgrade materials', display_order: 5 },
+  { id: uuidv4(), name: 'Limited', description: 'Event and unobtainable items', display_order: 6 }
 ];
 
 const insertCategory = db.prepare(`
@@ -33,85 +29,102 @@ const insertCategory = db.prepare(`
 for (const cat of categories) {
   insertCategory.run(cat.id, cat.name, cat.description, cat.display_order);
 }
-console.log(`✅ Created ${categories.length} categories`);
+console.log(`Created ${categories.length} categories`);
 
 // Helper to get category id by name
 const getCategoryId = (name: string) => categories.find(c => c.name === name)?.id;
 
-// Items with realistic GPO-inspired data
+// Real GPO Items based on wiki data
 const items = [
-  // Devil Fruits (Common to Epic)
-  { name: 'Bomb Fruit', category: 'Devil Fruits', rarity: 'Common', value: 50000, trend: 'stable' },
-  { name: 'Spike Fruit', category: 'Devil Fruits', rarity: 'Common', value: 75000, trend: 'stable' },
-  { name: 'Spin Fruit', category: 'Devil Fruits', rarity: 'Uncommon', value: 150000, trend: 'up' },
-  { name: 'Chop Fruit', category: 'Devil Fruits', rarity: 'Uncommon', value: 175000, trend: 'stable' },
-  { name: 'Spring Fruit', category: 'Devil Fruits', rarity: 'Rare', value: 350000, trend: 'down' },
-  { name: 'Kilo Fruit', category: 'Devil Fruits', rarity: 'Rare', value: 400000, trend: 'stable' },
-  { name: 'Smoke Fruit', category: 'Devil Fruits', rarity: 'Rare', value: 500000, trend: 'up' },
-  { name: 'Flame Fruit', category: 'Devil Fruits', rarity: 'Epic', value: 2500000, trend: 'up' },
-  { name: 'Ice Fruit', category: 'Devil Fruits', rarity: 'Epic', value: 2800000, trend: 'stable' },
-  { name: 'Light Fruit', category: 'Devil Fruits', rarity: 'Epic', value: 3500000, trend: 'up' },
-  { name: 'Magma Fruit', category: 'Devil Fruits', rarity: 'Epic', value: 3200000, trend: 'stable' },
-  { name: 'Quake Fruit', category: 'Devil Fruits', rarity: 'Epic', value: 4000000, trend: 'up' },
-  { name: 'Dark Fruit', category: 'Devil Fruits', rarity: 'Epic', value: 3800000, trend: 'stable' },
+  // === FRUITS (using actual GPO names) ===
+  // Common
+  { name: 'Kilo Kilo no Mi', category: 'Fruits', rarity: 'Common', value: 25000, trend: 'stable' },
+  { name: 'Suke Suke no Mi', category: 'Fruits', rarity: 'Common', value: 30000, trend: 'stable' },
+  { name: 'Spin Spin no Mi', category: 'Fruits', rarity: 'Common', value: 35000, trend: 'stable' },
+  { name: 'Chiyu Chiyu no Mi', category: 'Fruits', rarity: 'Common', value: 40000, trend: 'up' },
 
-  // Legendary Fruits
-  { name: 'Dragon Fruit', category: 'Legendary Fruits', rarity: 'Legendary', value: 15000000, trend: 'up' },
-  { name: 'Leopard Fruit', category: 'Legendary Fruits', rarity: 'Legendary', value: 25000000, trend: 'up' },
-  { name: 'Spirit Fruit', category: 'Legendary Fruits', rarity: 'Legendary', value: 18000000, trend: 'stable' },
-  { name: 'Control Fruit', category: 'Legendary Fruits', rarity: 'Legendary', value: 12000000, trend: 'down' },
-  { name: 'Gravity Fruit', category: 'Legendary Fruits', rarity: 'Legendary', value: 14000000, trend: 'stable' },
+  // Rare
+  { name: 'Bari Bari no Mi', category: 'Fruits', rarity: 'Rare', value: 150000, trend: 'stable' },
+  { name: 'Mero Mero no Mi', category: 'Fruits', rarity: 'Rare', value: 200000, trend: 'up' },
+  { name: 'Horo Horo no Mi', category: 'Fruits', rarity: 'Rare', value: 175000, trend: 'stable' },
+  { name: 'Gomu Gomu no Mi', category: 'Fruits', rarity: 'Rare', value: 250000, trend: 'up' },
+  { name: 'Bomu Bomu no Mi', category: 'Fruits', rarity: 'Rare', value: 125000, trend: 'down' },
 
-  // Mythical Fruits
-  { name: 'Buddha Fruit', category: 'Mythical Fruits', rarity: 'Mythical', value: 50000000, trend: 'up' },
-  { name: 'Phoenix Fruit', category: 'Mythical Fruits', rarity: 'Mythical', value: 75000000, trend: 'up' },
-  { name: 'Nika Fruit', category: 'Mythical Fruits', rarity: 'Mythical', value: 150000000, trend: 'up' },
+  // Epic
+  { name: 'Yomi Yomi no Mi', category: 'Fruits', rarity: 'Epic', value: 750000, trend: 'stable' },
+  { name: 'Bane Bane no Mi', category: 'Fruits', rarity: 'Epic', value: 600000, trend: 'down' },
+  { name: 'Kira Kira no Mi', category: 'Fruits', rarity: 'Epic', value: 900000, trend: 'up' },
 
-  // Weapons
+  // Legendary
+  { name: 'Mera Mera no Mi', category: 'Fruits', rarity: 'Legendary', value: 2500000, trend: 'stable' },
+  { name: 'Hie Hie no Mi', category: 'Fruits', rarity: 'Legendary', value: 3000000, trend: 'up' },
+  { name: 'Goro Goro no Mi', category: 'Fruits', rarity: 'Legendary', value: 3500000, trend: 'up' },
+  { name: 'Pika Pika no Mi', category: 'Fruits', rarity: 'Legendary', value: 4000000, trend: 'up' },
+  { name: 'Magu Magu no Mi', category: 'Fruits', rarity: 'Legendary', value: 4500000, trend: 'stable' },
+  { name: 'Gura Gura no Mi', category: 'Fruits', rarity: 'Legendary', value: 5000000, trend: 'up' },
+  { name: 'Yami Yami no Mi', category: 'Fruits', rarity: 'Legendary', value: 4200000, trend: 'stable' },
+  { name: 'Suna Suna no Mi', category: 'Fruits', rarity: 'Legendary', value: 2800000, trend: 'stable' },
+  { name: 'Zushi Zushi no Mi', category: 'Fruits', rarity: 'Legendary', value: 3200000, trend: 'up' },
+  { name: 'Ito Ito no Mi', category: 'Fruits', rarity: 'Legendary', value: 2600000, trend: 'down' },
+  { name: 'Nikyu Nikyu no Mi', category: 'Fruits', rarity: 'Legendary', value: 2400000, trend: 'stable' },
+  { name: 'Yuki Yuki no Mi', category: 'Fruits', rarity: 'Legendary', value: 2200000, trend: 'stable' },
+  { name: 'Kage Kage no Mi', category: 'Fruits', rarity: 'Legendary', value: 2000000, trend: 'down' },
+  { name: 'Moku Moku no Mi', category: 'Fruits', rarity: 'Legendary', value: 1800000, trend: 'stable' },
+  { name: 'Goru Goru no Mi', category: 'Fruits', rarity: 'Legendary', value: 3800000, trend: 'up' },
+
+  // Mythical
+  { name: 'Tori Tori no Mi: Phoenix', category: 'Fruits', rarity: 'Mythical', value: 25000000, trend: 'up' },
+  { name: 'Mochi Mochi no Mi', category: 'Fruits', rarity: 'Mythical', value: 30000000, trend: 'up' },
+  { name: 'Ope Ope no Mi', category: 'Fruits', rarity: 'Mythical', value: 20000000, trend: 'stable' },
+  { name: 'Doku Doku no Mi', category: 'Fruits', rarity: 'Mythical', value: 18000000, trend: 'stable' },
+  { name: 'Hito Hito no Mi: Daibutsu', category: 'Fruits', rarity: 'Mythical', value: 22000000, trend: 'up' },
+  { name: 'Ryu Ryu no Mi: Pteranodon', category: 'Fruits', rarity: 'Mythical', value: 35000000, trend: 'up' },
+  { name: 'Uo Uo no Mi: Seiryu', category: 'Fruits', rarity: 'Mythical', value: 50000000, trend: 'up' },
+  { name: 'Soru Soru no Mi', category: 'Fruits', rarity: 'Mythical', value: 28000000, trend: 'stable' },
+
+  // === WEAPONS ===
   { name: 'Bisento', category: 'Weapons', rarity: 'Legendary', value: 8000000, trend: 'stable' },
-  { name: 'Yoru', category: 'Weapons', rarity: 'Legendary', value: 12000000, trend: 'up' },
-  { name: 'Enma', category: 'Weapons', rarity: 'Legendary', value: 20000000, trend: 'up' },
-  { name: 'Shusui', category: 'Weapons', rarity: 'Epic', value: 5000000, trend: 'stable' },
-  { name: 'Wado Ichimonji', category: 'Weapons', rarity: 'Rare', value: 800000, trend: 'stable' },
-  { name: 'Sandai Kitetsu', category: 'Weapons', rarity: 'Rare', value: 600000, trend: 'down' },
-  { name: 'Cutlass', category: 'Weapons', rarity: 'Common', value: 50000, trend: 'stable' },
-  { name: 'Flintlock', category: 'Weapons', rarity: 'Common', value: 30000, trend: 'stable' },
+  { name: 'Yoru', category: 'Weapons', rarity: 'Legendary', value: 15000000, trend: 'up' },
+  { name: 'Shusui', category: 'Weapons', rarity: 'Epic', value: 3000000, trend: 'stable' },
+  { name: 'Wado Ichimonji', category: 'Weapons', rarity: 'Rare', value: 500000, trend: 'stable' },
+  { name: 'Sandai Kitetsu', category: 'Weapons', rarity: 'Rare', value: 400000, trend: 'down' },
+  { name: 'Trident', category: 'Weapons', rarity: 'Epic', value: 2000000, trend: 'stable' },
+  { name: 'Pole (2nd Form)', category: 'Weapons', rarity: 'Legendary', value: 6000000, trend: 'up' },
+  { name: 'Seabeast Katana', category: 'Weapons', rarity: 'Rare', value: 350000, trend: 'stable' },
+  { name: 'Cutlass', category: 'Weapons', rarity: 'Common', value: 15000, trend: 'stable' },
+  { name: 'Flintlock', category: 'Weapons', rarity: 'Common', value: 10000, trend: 'stable' },
+  { name: 'Kiribachi', category: 'Weapons', rarity: 'Epic', value: 1500000, trend: 'stable' },
+  { name: 'Gravity Blade', category: 'Weapons', rarity: 'Legendary', value: 10000000, trend: 'up' },
 
-  // Accessories
-  { name: 'Cupid Wings', category: 'Accessories', rarity: 'Event', value: 30000000, trend: 'up' },
-  { name: 'Halo', category: 'Accessories', rarity: 'Event', value: 25000000, trend: 'stable' },
-  { name: 'Marine Cape', category: 'Accessories', rarity: 'Rare', value: 1000000, trend: 'stable' },
-  { name: 'Pirate Cape', category: 'Accessories', rarity: 'Rare', value: 1200000, trend: 'up' },
-  { name: 'Sky Ring', category: 'Accessories', rarity: 'Epic', value: 3000000, trend: 'stable' },
+  // === ACCESSORIES ===
+  { name: 'Cupid Wings', category: 'Accessories', rarity: 'Event', value: 40000000, trend: 'up' },
+  { name: 'Dark Angel Wings', category: 'Accessories', rarity: 'Event', value: 35000000, trend: 'stable' },
+  { name: 'Marine Cape', category: 'Accessories', rarity: 'Rare', value: 800000, trend: 'stable' },
+  { name: 'Black Cape', category: 'Accessories', rarity: 'Uncommon', value: 200000, trend: 'stable' },
+  { name: 'Tomoe Ring', category: 'Accessories', rarity: 'Epic', value: 2500000, trend: 'up' },
+  { name: 'Blue Sash', category: 'Accessories', rarity: 'Rare', value: 600000, trend: 'stable' },
+  { name: 'Heart Glasses', category: 'Accessories', rarity: 'Event', value: 5000000, trend: 'stable' },
+  { name: 'Elo Hammer', category: 'Accessories', rarity: 'Event', value: 60000000, trend: 'up' },
 
-  // Event Items
-  { name: 'Elo Hammer', category: 'Event Items', rarity: 'Event', value: 45000000, trend: 'up' },
-  { name: 'Candy Cane', category: 'Event Items', rarity: 'Event', value: 35000000, trend: 'stable' },
-  { name: 'Pumpkin Head', category: 'Event Items', rarity: 'Event', value: 20000000, trend: 'down' },
-  { name: 'Bunny Ears', category: 'Event Items', rarity: 'Event', value: 15000000, trend: 'stable' },
+  // === BOATS ===
+  { name: 'Dinghy', category: 'Boats', rarity: 'Common', value: 5000, trend: 'stable' },
+  { name: 'Caravel', category: 'Boats', rarity: 'Uncommon', value: 50000, trend: 'stable' },
+  { name: 'Sloop', category: 'Boats', rarity: 'Rare', value: 150000, trend: 'stable' },
+  { name: 'Galleon', category: 'Boats', rarity: 'Epic', value: 500000, trend: 'stable' },
+  { name: 'Striker', category: 'Boats', rarity: 'Legendary', value: 2000000, trend: 'up' },
 
-  // Boats
-  { name: 'Dinghy', category: 'Boats', rarity: 'Common', value: 10000, trend: 'stable' },
-  { name: 'Caravel', category: 'Boats', rarity: 'Uncommon', value: 100000, trend: 'stable' },
-  { name: 'Galleon', category: 'Boats', rarity: 'Rare', value: 500000, trend: 'up' },
-  { name: 'Marine Battleship', category: 'Boats', rarity: 'Epic', value: 2000000, trend: 'stable' },
-  { name: 'Coffin Boat', category: 'Boats', rarity: 'Legendary', value: 10000000, trend: 'up' },
+  // === MATERIALS ===
+  { name: 'Demon Collar', category: 'Materials', rarity: 'Epic', value: 1000000, trend: 'stable' },
+  { name: 'Golden Relic', category: 'Materials', rarity: 'Legendary', value: 3000000, trend: 'up' },
+  { name: 'Kraken Core', category: 'Materials', rarity: 'Legendary', value: 4000000, trend: 'stable' },
+  { name: 'Sea Serpent Core', category: 'Materials', rarity: 'Epic', value: 800000, trend: 'stable' },
+  { name: 'Ancient Core', category: 'Materials', rarity: 'Legendary', value: 5000000, trend: 'up' },
 
-  // Outfits
-  { name: 'Warlord Coat', category: 'Outfits', rarity: 'Legendary', value: 8000000, trend: 'stable' },
-  { name: 'Admiral Coat', category: 'Outfits', rarity: 'Epic', value: 4000000, trend: 'up' },
-  { name: 'Marine Suit', category: 'Outfits', rarity: 'Rare', value: 500000, trend: 'stable' },
-  { name: 'Pirate Outfit', category: 'Outfits', rarity: 'Uncommon', value: 100000, trend: 'stable' },
-
-  // Consumables
-  { name: 'Golden Apple', category: 'Consumables', rarity: 'Rare', value: 200000, trend: 'stable' },
-  { name: 'Elixir', category: 'Consumables', rarity: 'Epic', value: 1000000, trend: 'up' },
-  { name: 'Devil Fruit Reset', category: 'Consumables', rarity: 'Legendary', value: 5000000, trend: 'stable' },
-
-  // Unobtainables
-  { name: 'Sword of Time', category: 'Unobtainables', rarity: 'Mythical', value: 500000000, trend: 'up' },
-  { name: 'Dragon Tamer', category: 'Unobtainables', rarity: 'Mythical', value: 350000000, trend: 'stable' },
-  { name: 'OG Marine Cape', category: 'Unobtainables', rarity: 'Legendary', value: 100000000, trend: 'up' }
+  // === LIMITED/UNOBTAINABLE ===
+  { name: 'Candy Cane', category: 'Limited', rarity: 'Event', value: 45000000, trend: 'up' },
+  { name: 'Festive Blade', category: 'Limited', rarity: 'Event', value: 30000000, trend: 'stable' },
+  { name: 'Pumpkin Head', category: 'Limited', rarity: 'Event', value: 25000000, trend: 'stable' },
+  { name: 'Sleigh', category: 'Limited', rarity: 'Event', value: 20000000, trend: 'down' },
 ];
 
 const insertItem = db.prepare(`
@@ -134,14 +147,13 @@ function generateHistory(itemId: string, currentValue: number, trend: string) {
     const date = new Date(now);
     date.setDate(date.getDate() - i);
 
-    // Calculate value based on trend
-    let variance = (Math.random() - 0.5) * 0.1; // ±5% random variance
+    let variance = (Math.random() - 0.5) * 0.1;
     let trendFactor = 0;
 
     if (trend === 'up') {
-      trendFactor = (30 - i) * 0.01; // 1% increase per day
+      trendFactor = (30 - i) * 0.008;
     } else if (trend === 'down') {
-      trendFactor = -(30 - i) * 0.005; // 0.5% decrease per day
+      trendFactor = -(30 - i) * 0.005;
     }
 
     const historicalValue = Math.round(currentValue * (1 - trendFactor + variance));
@@ -149,7 +161,7 @@ function generateHistory(itemId: string, currentValue: number, trend: string) {
     points.push({
       id: uuidv4(),
       item_id: itemId,
-      value: Math.max(historicalValue, 1000), // Minimum value
+      value: Math.max(historicalValue, 1000),
       recorded_at: date.toISOString().replace('T', ' ').split('.')[0],
       note: i === 0 ? 'Current value' : null
     });
@@ -161,12 +173,12 @@ function generateHistory(itemId: string, currentValue: number, trend: string) {
 for (const item of items) {
   const itemId = uuidv4();
   const categoryId = getCategoryId(item.category);
-  const isUnobtainable = item.category === 'Unobtainables' ? 1 : 0;
+  const isUnobtainable = item.category === 'Limited' ? 1 : 0;
 
   insertItem.run(
     itemId,
     item.name,
-    `A ${item.rarity.toLowerCase()} ${item.category.toLowerCase().slice(0, -1)} from the world of One Piece.`,
+    null, // No description
     categoryId,
     item.rarity,
     item.value,
@@ -174,12 +186,11 @@ for (const item of items) {
     isUnobtainable
   );
 
-  // Generate and insert value history
   const history = generateHistory(itemId, item.value, item.trend);
   for (const point of history) {
     insertHistory.run(point.id, point.item_id, point.value, point.recorded_at, point.note);
   }
 }
 
-console.log(`✅ Created ${items.length} items with historical data`);
-console.log('🏴‍☠️ Database seeding complete!');
+console.log(`Created ${items.length} items`);
+console.log('Done!');
