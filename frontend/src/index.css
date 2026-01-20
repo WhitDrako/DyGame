@@ -1,0 +1,234 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Base Styles */
+@layer base {
+  :root {
+    --ocean-dark: #000d1a;
+    --ocean-medium: #001a33;
+    --ocean-light: #003366;
+    --gold-primary: #e6a800;
+    --gold-light: #ffd24d;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #004d99 #001a33;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #001a33;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: #004d99;
+    border-radius: 4px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: #0066cc;
+  }
+
+  body {
+    @apply bg-ocean-950 text-white font-body;
+    background: linear-gradient(180deg, #000911 0%, #000d1a 100%);
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+/* Custom Components */
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-gold-500 to-gold-600 text-ocean-900 font-semibold py-2 px-6 rounded-lg
+           hover:from-gold-400 hover:to-gold-500 transition-all duration-300
+           shadow-lg hover:shadow-glow-gold active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-ocean-700 text-white font-semibold py-2 px-6 rounded-lg
+           border border-ocean-500 hover:bg-ocean-600 transition-all duration-300
+           hover:shadow-glow-blue active:scale-95;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 text-white font-semibold py-2 px-6 rounded-lg
+           hover:bg-red-500 transition-all duration-300 active:scale-95;
+  }
+
+  .card {
+    @apply bg-gradient-to-br from-ocean-800/80 to-ocean-900/90 rounded-xl
+           border border-ocean-600/30 shadow-card backdrop-blur-sm;
+  }
+
+  .card-hover {
+    @apply hover:border-gold-500/50 hover:shadow-glow-gold transition-all duration-300
+           hover:-translate-y-1;
+  }
+
+  .input {
+    @apply w-full bg-ocean-800 border border-ocean-600 rounded-lg px-4 py-3
+           text-white placeholder-ocean-400 focus:outline-none focus:border-gold-500
+           focus:ring-2 focus:ring-gold-500/30 transition-all duration-200;
+  }
+
+  .select {
+    @apply w-full bg-ocean-800 border border-ocean-600 rounded-lg px-4 py-3
+           text-white focus:outline-none focus:border-gold-500
+           focus:ring-2 focus:ring-gold-500/30 transition-all duration-200
+           cursor-pointer appearance-none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffd24d' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-ocean-200 mb-2;
+  }
+
+  .nav-link {
+    @apply text-ocean-200 hover:text-gold-400 transition-colors duration-200
+           font-medium px-4 py-2 rounded-lg hover:bg-ocean-800/50;
+  }
+
+  .nav-link-active {
+    @apply text-gold-400 bg-ocean-800/50;
+  }
+
+  /* Rarity badges */
+  .rarity-common {
+    @apply bg-common/20 text-common border border-common/30;
+  }
+
+  .rarity-uncommon {
+    @apply bg-uncommon/20 text-uncommon border border-uncommon/30;
+  }
+
+  .rarity-rare {
+    @apply bg-rare/20 text-rare border border-rare/30;
+  }
+
+  .rarity-epic {
+    @apply bg-epic/20 text-epic border border-epic/30;
+  }
+
+  .rarity-legendary {
+    @apply bg-legendary/20 text-legendary border border-legendary/30;
+  }
+
+  .rarity-mythical {
+    @apply bg-mythical/20 text-mythical border border-mythical/30;
+  }
+
+  .rarity-event {
+    @apply bg-event/20 text-event border border-event/30;
+  }
+
+  /* Trend indicators */
+  .trend-up {
+    @apply text-green-400;
+  }
+
+  .trend-down {
+    @apply text-red-400;
+  }
+
+  .trend-stable {
+    @apply text-ocean-400;
+  }
+
+  /* Trade result badges */
+  .trade-win {
+    @apply bg-green-500/20 text-green-400 border border-green-500/30;
+  }
+
+  .trade-fair {
+    @apply bg-gold-500/20 text-gold-400 border border-gold-500/30;
+  }
+
+  .trade-lose {
+    @apply bg-red-500/20 text-red-400 border border-red-500/30;
+  }
+
+  /* Loading spinner */
+  .spinner {
+    @apply w-8 h-8 border-4 border-ocean-600 border-t-gold-400 rounded-full animate-spin;
+  }
+
+  /* Page container */
+  .page-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+  }
+
+  /* Section title */
+  .section-title {
+    @apply text-2xl sm:text-3xl font-display font-bold text-white mb-6
+           flex items-center gap-3;
+  }
+
+  /* Modal overlay */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50;
+  }
+
+  /* Modal content */
+  .modal-content {
+    @apply bg-ocean-900 border border-ocean-600 rounded-2xl shadow-2xl
+           max-w-lg w-full mx-4 overflow-hidden;
+  }
+}
+
+/* Animations */
+@layer utilities {
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-gold-300 via-gold-400 to-gold-500;
+  }
+
+  .animate-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+}
+
+/* Ban screen */
+.ban-screen {
+  @apply fixed inset-0 bg-black flex items-center justify-center z-[9999];
+}
+
+.ban-message {
+  @apply text-center;
+}
+
+.ban-title {
+  @apply text-4xl font-display font-bold text-red-500 mb-4;
+}
+
+.ban-description {
+  @apply text-ocean-400 text-lg;
+}
